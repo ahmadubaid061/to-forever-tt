@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For My Love</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Playfair+Display:ital,wght@1,600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff0f5;
+        background-image: url("https://www.transparenttextures.com/patterns/flowers.png");
+        font-family: "Dancing Script", cursive;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      #question-section h1 {
+        color: #d02090;
+        font-size: 3.5rem;
+        text-shadow: 2px 2px 8px rgba(255, 105, 180, 0.3);
+        margin-bottom: 40px;
+        padding: 0 15px;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      #yes-btn {
+        background: linear-gradient(45deg, #ff69b4, #ff1493);
+        color: white;
+        padding: 20px 60px;
+        font-size: 1.8rem;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(255, 20, 147, 0.4);
+        font-family: "Great Vibes", cursive;
+        transition: transform 0.2s;
+      }
+
+      /* The Bubble Container */
+      #no-container {
+        position: fixed;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.1s ease;
+      }
+
+      /* The Speech Bubble */
+      #bubble {
+        background: #ff1493;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 15px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        position: relative;
+        white-space: nowrap;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif; /* Cleaner font for bubble */
+      }
+
+      /* The little arrow under the bubble */
+      #bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid #ff1493;
+      }
+
+      #no-btn {
+        background: white;
+        color: #ff1493;
+        border: 2px solid #ff1493;
+        padding: 12px 35px;
+        border-radius: 25px;
+        font-size: 1.2rem;
+        font-family: "Dancing Script", cursive;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      #celebration-section {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .main-cheer {
+        font-size: 4rem;
+        color: #d02090;
+        margin: 0;
+        animation: heartBeat 1.2s infinite;
+      }
+
+      .sub-cheer {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        color: #b8860b;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 2s forwards 1s;
+        font-style: italic;
+      }
+
+      @keyframes heartBeat {
+        0% {
+          transform: scale(1);
+        }
+        10% {
+          transform: scale(1.1);
+        }
+        20% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .falling-element {
+        position: fixed;
+        pointer-events: none;
+        z-index: 100;
+        animation: fall 4s linear forwards;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="question-section">
+      <h1>Hello TT my Love!<br />Will you marry me? 💍</h1>
+      <button id="yes-btn" onclick="celebrate()">Yes, I will!</button>
+    </div>
+
+    <div id="no-container">
+      <div id="bubble">Don't 🥺</div>
+      <button id="no-btn" onclick="moveNoButton()">No</button>
+    </div>
+
+    <div id="celebration-section">
+      <h1 class="main-cheer">
+        <span style="font-size: 0.5em">YAYYYYY! ❤️</span> <br />I knew you would
+        say yes! 🌹
+      </h1>
+      <h2 class="sub-cheer">Congratulations, we are getting married! 🥂</h2>
+    </div>
+
+    <script>
+      const noContainer = document.getElementById("no-container");
+      const bubble = document.getElementById("bubble");
+      const messages = [
+        "Wait, what?",
+        "Really?",
+        "Think again!",
+        "Are you sure?",
+        "Still No? Really?",
+        "You can't escape love!",
+        "Nice try!",
+        "You're testing my patience!",
+        "Just click Yes ❤️",
+        "Haha nope!",
+        "Nope not happening",
+        "How far can you go?",
+        "Try again!",
+        "Almost had it!",
+        "Look over there! (No)",
+      ];
+
+      let messageIndex = 0;
+
+      function moveNoButton() {
+        // Update bubble text
+        bubble.innerText = messages[messageIndex];
+        messageIndex = (messageIndex + 1) % messages.length;
+
+        // Move the whole container
+        const x =
+          Math.random() * (window.innerWidth - noContainer.offsetWidth - 40);
+        const y =
+          Math.random() * (window.innerHeight - noContainer.offsetHeight - 40);
+
+        noContainer.style.left = Math.max(20, x) + "px";
+        noContainer.style.top = Math.max(20, y) + "px";
+
+        spawnItem("🌸");
+      }
+
+      function spawnItem(symbol) {
+        const e = document.createElement("div");
+        e.className = "falling-element";
+        e.innerHTML = symbol;
+        e.style.left = Math.random() * 100 + "vw";
+        e.style.top = "-5vh";
+        e.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.body.appendChild(e);
+        setTimeout(() => e.remove(), 4000);
+      }
+
+      function celebrate() {
+        document.getElementById("question-section").style.display = "none";
+        noContainer.style.display = "none";
+        document.getElementById("celebration-section").style.display = "flex";
+        document.body.style.backgroundImage = "none";
+        document.body.style.backgroundColor = "#fff5fb";
+
+        setInterval(() => {
+          const items = ["❤️", "💖", "🌹", "🌸", "✨", "💍"];
+          spawnItem(items[Math.floor(Math.random() * items.length)]);
+        }, 150);
+      }
+
+      window.onload = () => {
+        noContainer.style.left = "70%";
+        noContainer.style.top = "70%";
+      };
+    </script>
+  </body>
+</html>
