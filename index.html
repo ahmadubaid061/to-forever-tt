@@ -178,7 +178,7 @@
 
     <div id="no-container">
       <div id="bubble">Don't 🥺</div>
-      <button id="no-btn" onclick="moveNoButton()">No</button>
+      <button id="no-btn" >No</button>
     </div>
 
     <div id="celebration-section">
@@ -231,7 +231,7 @@
 
         spawnItem("🌸");
       }
-
+      noContainer.addEventListener("mousemove", moveNoButton);
       function spawnItem(symbol) {
         const e = document.createElement("div");
         e.className = "falling-element";
